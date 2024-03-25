@@ -1,5 +1,5 @@
 
-from cms.utils.moderator import get_cmsplugin_queryset
+#from cms.utils.moderator import get_cmsplugin_queryset
 from cms.utils.plugins import build_plugin_tree
 from django.db.models import Q
 from django.http import JsonResponse, Http404
@@ -9,10 +9,11 @@ from djangocms_charts.models import ChartModel, GlobalOptionsGroupModel
 
 
 def get_chart_as_json(request, chart_id):
+    from cms.models import CMSPlugin
     chart_obj = get_object_or_404(ChartModel, id=chart_id)
 
     # Get the CMSPlugins of any Child Datasets
-    qs = get_cmsplugin_queryset()
+    qs = CMSPlugin.objects.all()
     qs = qs.filter(Q(parent_id=chart_id))
 
     # For some reason we need position not path here...
